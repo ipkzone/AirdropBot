@@ -1,7 +1,6 @@
 <?php
 
 // simple coding by Iddant ID
-
 date_default_timezone_set('Asia/Jakarta');
 error_reporting(0);
 set_time_limit(0);
@@ -11,12 +10,13 @@ ini_set('request_order', 'GP');
 ini_set('variables_order', 'EGPCS');
 ini_set('max_execution_time', '-1');
 
+
 // get file wallet
 $file = file_get_contents("wallet.txt");
 $explode = explode("\n", $file);
 foreach ($explode as $wallet) {
 
-// getting fake data
+    // getting fake data
     $fake = array();
     $fake[] = "Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4854.140 Safari/537.36";
     $fake[] = "Host: api.namefake.com";
@@ -32,13 +32,7 @@ foreach ($explode as $wallet) {
     curl_setopt($url, CURLOPT_SSL_VERIFYHOST, 0);
     $result1 = curl_exec($url);
     $json = json_decode($result1, true);
-
     $ua = $json['useragent'];
-    $name = $json['username'];
-    $akun = "" . $name . "@gmaill.my.id";
-    $retweet = "https://twitter.com/" . $name . "/status/1429" . rand(15, 1000000000000000) . "";
-    $dc = "" . $name . "#" . rand(4, 10000) . "";
-
 
     // prossesiing signup in wallet
     $body = "address=" . $wallet . "&code=7crX";
@@ -64,18 +58,19 @@ foreach ($explode as $wallet) {
     curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
     $response = curl_exec($ch);
     $json = json_decode($response, true);
-
     $id = $json['data']['id'];
     $msg = $json['data']['address'];
     $rew = $json['data']['money'];
     $rev = $json['data']['invitation_link'];
+    
     echo " \e[34mINFO\e[0m: ID Account     : \e[92m{$id}\e[0m\n";
     echo " \e[34mINFO\e[0m: Wallet         : \e[92m{$msg}\e[0m\n";
     echo " \e[34mINFO\e[0m: Reward Money   : \e[92m{$rew}\e[0m GEM\n";
     echo " \e[34mINFO\e[0m: Invitation Link: \e[92m{$rev}\e[0m\n\n";
-
-
+    
+// file save with txt
     $file = 'gemstone.txt';
     $person = "{$wallet}|{$rew}\n";
     file_put_contents($file, $person, FILE_APPEND | LOCK_EX);
+    
 }
